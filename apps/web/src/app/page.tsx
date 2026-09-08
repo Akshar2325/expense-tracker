@@ -128,10 +128,29 @@ export default function HomePage() {
           {[
             {
               title: "Product",
-              links: ["Dashboard", "Transactions", "Budgets", "Reports"],
+              links: [
+                { label: "Dashboard", href: "/dashboard" },
+                { label: "Transactions", href: "/transactions" },
+                { label: "Budgets", href: "/budgets" },
+                { label: "Reports", href: "/reports" },
+              ],
             },
-            { title: "Company", links: ["About", "Privacy", "Terms"] },
-            { title: "Resources", links: ["Docs", "API", "Status"] },
+            {
+              title: "Company",
+              links: [
+                { label: "About", href: "/about" },
+                { label: "Privacy", href: "/privacy" },
+                { label: "Terms", href: "/terms" },
+              ],
+            },
+            {
+              title: "Resources",
+              links: [
+                { label: "Docs", href: "/docs" },
+                { label: "API", href: "/api/docs" },
+                { label: "Status", href: "/status" },
+              ],
+            },
           ].map((col) => (
             <div key={col.title}>
               <h4 className="text-caption-uppercase text-muted mb-4">
@@ -139,12 +158,12 @@ export default function HomePage() {
               </h4>
               <ul className="space-y-2">
                 {col.links.map((l) => (
-                  <li key={l}>
+                  <li key={l.label}>
                     <Link
-                      href="#"
+                      href={l.href}
                       className="text-body-sm text-body hover:text-ink transition-colors"
                     >
-                      {l}
+                      {l.label}
                     </Link>
                   </li>
                 ))}

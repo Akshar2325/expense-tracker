@@ -2,6 +2,12 @@ packages:
   - "apps/*"
   - "packages/*"
   - "infrastructure"
+overrides:
+  '@types/react': 18.3.31
+  '@types/react-dom': 18.3.7
+# Expo SDK 52 does not support pnpm's isolated node_modules layout well;
+# use a hoisted (flat) node_modules so Metro can resolve packages reliably.
+nodeLinker: hoisted
 allowBuilds:
   '@nestjs/core': true
   '@prisma/engines': true

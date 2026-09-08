@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "Ledger",
+    "slug": "ledger",
+    "version": "1.0.0",
+    "orientation": "default",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#f5f5f5"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ledger.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#f5f5f5"
+      },
+      "package": "com.ledger.app",
+      "edgeToEdgeEnabled": true
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static"
+    },
+    "plugins": ["expo-router", "expo-font"],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

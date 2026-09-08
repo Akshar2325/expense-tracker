@@ -67,3 +67,18 @@
 - [x] 45. Theme-aware charts (reports page via MutationObserver-driven useChartColors) + theme-aware category chips & wallet SVG
 - [x] 46. Gitignore generated Prisma client (packages/database/src/generated) + prebuild hook to regenerate on build
 - [x] 47. Commit Sprint 7 to GitHub (commit 66bcb87)
+
+## Sprint 8 — React Native Mobile App (Expo)
+
+- [x] 48. Scaffold Expo app in monorepo (apps/mobile, Expo Router, pnpm workspace, responsive to phones/tablets/iPad)
+- [x] 49. Theme system (light/dark/system with system default) + glassmorphism design tokens matching web
+- [x] 50. Animated cartoon auth screens (login/register) with playful animations & gradient orbs
+- [x] 51. Auth-first routing (protected app group redirects to login when unauthenticated)
+- [x] 52. Dashboard screen (balance, income, expense, budget widgets)
+- [x] 53. Transactions screen (list, search, add/edit modal)
+- [x] 54. Budgets + Categories screens
+- [x] 55. Reports screen (charts) + Accounts + Recurring screens
+- [x] 56. Settings screen (theme picker light/dark/system, profile, logout)
+- [x] 57. Responsive adaptive layout for phones/tablets/iPad (compact + glassy iPhone effect)
+- [x] 58. Web footer links fix (Terms, Privacy, API, Docs, Status pages)
+- [x] 59. Testing + commit Sprint 8 to GitHub
