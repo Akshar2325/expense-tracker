@@ -23,15 +23,15 @@
 - [x] 16. NestJS transactions search/filter engine
 - [x] 17. Web dashboard widgets (balance, income, expense, budget)
 - [x] 18. Web transactions list page + filters UI
-- [ ] 19. Web add/edit transaction page
-- [ ] 20. Commit Sprint 2 to GitHub
+- [x] 19. Web add/edit transaction page
+- [x] 20. Commit Sprint 2 to GitHub (commit 3a06e05)
 
 ## Sprint 3 — Filters + Budgets
 
 - [x] 21. NestJS budgets module (CRUD + progress calculation)
 - [x] 22. NestJS saved-filters module
 - [x] 23. Web budgets page + progress bars
-- [ ] 24. Web saved filters UI
+- [x] 24. Web saved filters UI
 - [x] 25. NestJS recurring-transactions module
 - [x] 26. Web recurring transactions page
 - [ ] 27. Commit Sprint 3 to GitHub

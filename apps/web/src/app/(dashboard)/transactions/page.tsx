@@ -10,6 +10,7 @@ import {
   TransactionForm,
   type TransactionFormValues,
 } from "@/components/transactions/transaction-form";
+import { SavedFilters } from "@/components/transactions/saved-filters";
 import { Search, Plus } from "lucide-react";
 
 interface Transaction {
@@ -120,6 +121,13 @@ export default function TransactionsPage() {
           <option value="REFUND">Refund</option>
           <option value="ADJUSTMENT">Adjustment</option>
         </select>
+        <SavedFilters
+          currentFilters={{ search, types: type }}
+          onApply={(f) => {
+            setSearch(f.search || "");
+            setType(f.types || "");
+          }}
+        />
       </div>
 
       {/* List */}
