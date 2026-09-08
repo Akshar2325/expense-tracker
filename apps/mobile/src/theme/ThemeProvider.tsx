@@ -67,10 +67,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const bg = resolved === "dark" ? "#0c0a09" : "#f5f5f5";
     SystemUI.setBackgroundColorAsync(bg).catch(() => {});
-    NavigationBar.setBackgroundColorAsync(bg).catch(() => {});
-    NavigationBar.setButtonStyleAsync(
-      resolved === "dark" ? "light" : "dark",
-    ).catch(() => {});
+    // SDK 57: expo-navigation-bar uses a declarative style API.
+    NavigationBar.setStyle(resolved === "dark" ? "light" : "dark");
   }, [resolved]);
 
   const value = useMemo(

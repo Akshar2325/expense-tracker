@@ -3,9 +3,9 @@ packages:
   - "packages/*"
   - "infrastructure"
 overrides:
-  '@types/react': 18.3.31
-  '@types/react-dom': 18.3.7
-# Expo SDK 52 does not support pnpm's isolated node_modules layout well;
+  '@types/react': 19.2.18
+  '@types/react-dom': 19.2.7
+# Expo SDK 57 does not support pnpm's isolated node_modules layout well;
 # use a hoisted (flat) node_modules so Metro can resolve packages reliably.
 nodeLinker: hoisted
 allowBuilds:
@@ -15,3 +15,13 @@ allowBuilds:
   argon2: true
   esbuild: true
   prisma: true
+minimumReleaseAgeExclude:
+  - '@expo/ui@57.0.17'
+  - expo-glass-effect@57.0.2
+  - expo-router@57.0.20
+  - '@expo/cli@57.0.23'
+  - '@expo/metro-file-map@57.0.3'
+  - babel-preset-expo@57.0.11
+  - expo-modules-core@57.0.17
+  - expo-modules-jsi@57.1.0
+  - expo@57.0.21

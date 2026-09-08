@@ -2,6 +2,7 @@
   "expo": {
     "name": "Ledger",
     "slug": "ledger",
+    "scheme": "ledger",
     "version": "1.0.0",
     "orientation": "default",
     "userInterfaceStyle": "automatic",

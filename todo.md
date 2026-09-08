@@ -82,3 +82,12 @@
 - [x] 57. Responsive adaptive layout for phones/tablets/iPad (compact + glassy iPhone effect)
 - [x] 58. Web footer links fix (Terms, Privacy, API, Docs, Status pages)
 - [x] 59. Testing + commit Sprint 8 to GitHub
+
+## Sprint 9 — Expo SDK 57 Upgrade
+
+- [x] 60. Upgrade Expo SDK 52 → 57 (React 19.2, RN 0.86, Reanimated 4, expo-router 6, TypeScript 6)
+- [x] 61. Fix expo-navigation-bar API change (declarative `NavigationBar.setStyle` replaces `setBackgroundColorAsync`/`setButtonStyleAsync`)
+- [x] 62. Remove deprecated `baseUrl` from mobile tsconfig (TS 6 deprecation)
+- [x] 63. Add `scheme` to app.json (Linking warning fix)
+- [x] 64. Verify Android bundle compiles on SDK 57 + typecheck clean (mobile + web)
+- [x] 65. Commit Sprint 9 to GitHub
