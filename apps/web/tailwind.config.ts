@@ -1,31 +1,33 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
+  darkMode: "class",
   content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
   theme: {
     extend: {
       colors: {
-        // Brand & accent
-        primary: "#292524",
-        "primary-active": "#0c0a09",
-        ink: "#0c0a09",
-        body: "#4e4e4e",
-        "body-strong": "#292524",
-        muted: "#777169",
-        "muted-soft": "#a8a29e",
-        hairline: "#e7e5e4",
-        "hairline-soft": "#f0efed",
-        "hairline-strong": "#d6d3d1",
-        canvas: "#f5f5f5",
-        "canvas-soft": "#fafafa",
-        "canvas-deep": "#0c0a09",
-        "surface-card": "#ffffff",
-        "surface-strong": "#f0efed",
-        "surface-dark": "#0c0a09",
-        "surface-dark-elevated": "#1c1917",
-        "on-primary": "#ffffff",
-        "on-dark": "#ffffff",
-        "on-dark-soft": "#a8a29e",
+        // Brand & accent — resolved from CSS variables so they flip in dark mode
+        primary: "rgb(var(--color-primary) / <alpha-value>)",
+        "primary-active": "rgb(var(--color-primary-active) / <alpha-value>)",
+        ink: "rgb(var(--color-ink) / <alpha-value>)",
+        body: "rgb(var(--color-body) / <alpha-value>)",
+        "body-strong": "rgb(var(--color-body-strong) / <alpha-value>)",
+        muted: "rgb(var(--color-muted) / <alpha-value>)",
+        "muted-soft": "rgb(var(--color-muted-soft) / <alpha-value>)",
+        hairline: "rgb(var(--color-hairline) / <alpha-value>)",
+        "hairline-soft": "rgb(var(--color-hairline-soft) / <alpha-value>)",
+        "hairline-strong": "rgb(var(--color-hairline-strong) / <alpha-value>)",
+        canvas: "rgb(var(--color-canvas) / <alpha-value>)",
+        "canvas-soft": "rgb(var(--color-canvas-soft) / <alpha-value>)",
+        "canvas-deep": "rgb(var(--color-canvas-deep) / <alpha-value>)",
+        "surface-card": "rgb(var(--color-surface-card) / <alpha-value>)",
+        "surface-strong": "rgb(var(--color-surface-strong) / <alpha-value>)",
+        "surface-dark": "rgb(var(--color-surface-dark) / <alpha-value>)",
+        "surface-dark-elevated":
+          "rgb(var(--color-surface-dark-elevated) / <alpha-value>)",
+        "on-primary": "rgb(var(--color-on-primary) / <alpha-value>)",
+        "on-dark": "rgb(var(--color-on-dark) / <alpha-value>)",
+        "on-dark-soft": "rgb(var(--color-on-dark-soft) / <alpha-value>)",
         // Atmospheric gradient orbs (decoration only)
         "gradient-mint": "#a7e5d3",
         "gradient-peach": "#f4c5a8",
@@ -33,8 +35,9 @@ const config: Config = {
         "gradient-sky": "#a8c8e8",
         "gradient-rose": "#e8b8c4",
         // Semantic
-        "semantic-error": "#dc2626",
-        "semantic-success": "#16a34a",
+        "semantic-error": "rgb(var(--color-semantic-error) / <alpha-value>)",
+        "semantic-success":
+          "rgb(var(--color-semantic-success) / <alpha-value>)",
       },
       fontFamily: {
         // Waldenburg Light substitute: EB Garamond at weight 300

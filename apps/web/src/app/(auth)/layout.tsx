@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { GradientOrb } from "@/components/ui/orb";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { AuthProvider } from "@/lib/auth";
 
 export default function AuthLayout({
@@ -25,11 +26,14 @@ export default function AuthLayout({
 
         {/* Logo */}
         <header className="relative z-10 mx-auto max-w-content w-full px-base py-6">
-          <Link href="/" className="inline-flex items-center gap-2">
-            <span className="font-display text-display-sm text-ink leading-none mt-1">
-              Ledger
-            </span>
-          </Link>
+          <div className="flex items-center justify-between">
+            <Link href="/" className="inline-flex items-center gap-2">
+              <span className="font-display text-display-sm text-ink leading-none mt-1">
+                Ledger
+              </span>
+            </Link>
+            <ThemeToggle />
+          </div>
         </header>
 
         <main className="relative z-10 flex-1 flex items-center justify-center px-base pb-16">

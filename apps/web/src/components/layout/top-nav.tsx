@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 interface NavItem {
   href: string;
@@ -60,6 +61,7 @@ export function TopNav({
 
         {/* Right side */}
         <div className="flex items-center gap-3">
+          <ThemeToggle />
           {authenticated ? (
             <>
               <span className="hidden sm:block text-body-sm text-muted mr-1">
@@ -99,18 +101,18 @@ function WalletIcon({ className }: { className?: string }) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <rect y="63" width="416" height="322" rx="45" fill="#292524" />
+      <rect y="63" width="416" height="322" rx="45" fill="currentColor" />
       <rect
         x="352"
         y="160"
         width="144"
         height="176"
         rx="46"
-        fill="#fff"
-        stroke="#292524"
+        fill="var(--color-canvas)"
+        stroke="currentColor"
         strokeWidth="24"
       />
-      <circle cx="420" cy="248" r="18" fill="#292524" />
+      <circle cx="420" cy="248" r="18" fill="currentColor" />
     </svg>
   );
 }

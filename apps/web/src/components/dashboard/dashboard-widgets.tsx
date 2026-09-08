@@ -129,7 +129,7 @@ export function DashboardWidgets() {
                       className="h-full rounded-full"
                       style={{
                         width: `${pct}%`,
-                        backgroundColor: c.color || "#292524",
+                        backgroundColor: c.color || "var(--color-ink)",
                       }}
                     />
                   </div>
@@ -158,7 +158,10 @@ export function DashboardWidgets() {
                 <div className="flex items-center gap-3 min-w-0">
                   <div
                     className="h-8 w-8 rounded-full flex items-center justify-center shrink-0"
-                    style={{ backgroundColor: t.category?.color || "#f0efed" }}
+                    style={{
+                      backgroundColor:
+                        t.category?.color || "var(--color-hairline-soft)",
+                    }}
                   >
                     <span className="text-sm">{t.category?.icon || "•"}</span>
                   </div>

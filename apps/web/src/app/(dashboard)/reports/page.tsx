@@ -15,6 +15,7 @@ import {
 } from "recharts";
 import { authedRequest } from "@/lib/api";
 import { formatCurrency } from "@/lib/utils";
+import { useChartColors } from "@/lib/theme";
 import { Card } from "@/components/ui/card";
 
 interface Summary {
@@ -56,6 +57,7 @@ export default function ReportsPage() {
   const [trend, setTrend] = useState<TrendPoint[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const chart = useChartColors();
 
   useEffect(() => {
     const now = new Date();
@@ -147,17 +149,17 @@ export default function ReportsPage() {
               <BarChart data={trend} barGap={4}>
                 <CartesianGrid
                   strokeDasharray="3 3"
-                  stroke="#f0efed"
+                  stroke={chart.grid}
                   vertical={false}
                 />
                 <XAxis
                   dataKey="period"
-                  tick={{ fontSize: 12, fill: "#777169" }}
-                  axisLine={{ stroke: "#e7e5e4" }}
+                  tick={{ fontSize: 12, fill: chart.tick }}
+                  axisLine={{ stroke: chart.axis }}
                   tickLine={false}
                 />
                 <YAxis
-                  tick={{ fontSize: 12, fill: "#777169" }}
+                  tick={{ fontSize: 12, fill: chart.tick }}
                   axisLine={false}
                   tickLine={false}
                   width={60}
@@ -166,11 +168,13 @@ export default function ReportsPage() {
                   formatter={(value) => formatCurrency(Number(value))}
                   contentStyle={{
                     borderRadius: 12,
-                    border: "1px solid #e7e5e4",
+                    border: `1px solid ${chart.border}`,
                     fontSize: 13,
+                    background: "var(--color-surface-card)",
+                    color: "var(--color-body)",
                   }}
                 />
-                <Bar dataKey="expense" fill="#292524" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="expense" fill={chart.ink} radius={[6, 6, 0, 0]} />
                 <Bar dataKey="income" fill="#a7e5d3" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
@@ -208,8 +212,10 @@ export default function ReportsPage() {
                     formatter={(value) => formatCurrency(Number(value))}
                     contentStyle={{
                       borderRadius: 12,
-                      border: "1px solid #e7e5e4",
+                      border: `1px solid ${chart.border}`,
                       fontSize: 13,
+                      background: "var(--color-surface-card)",
+                      color: "var(--color-body)",
                     }}
                   />
                 </PieChart>

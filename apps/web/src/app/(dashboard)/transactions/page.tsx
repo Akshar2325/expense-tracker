@@ -163,7 +163,10 @@ export default function TransactionsPage() {
                 <div className="flex items-center gap-3 min-w-0">
                   <div
                     className="h-9 w-9 rounded-full flex items-center justify-center shrink-0"
-                    style={{ backgroundColor: t.category?.color || "#f0efed" }}
+                    style={{
+                      backgroundColor:
+                        t.category?.color || "var(--color-hairline-soft)",
+                    }}
                   >
                     <span className="text-sm">{t.category?.icon || "•"}</span>
                   </div>

@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { AuthProvider, useAuth } from "@/lib/auth";
 import { SidebarNav } from "@/components/layout/sidebar-nav";
 import { GradientOrb } from "@/components/ui/orb";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import {
   LayoutDashboard,
   ArrowLeftRight,
@@ -58,6 +59,7 @@ function DashboardShell({ children }: { children: React.ReactNode }) {
             </span>
           </Link>
           <div className="flex items-center gap-4">
+            <ThemeToggle />
             <span className="hidden sm:block text-body-sm text-muted">
               {user?.displayName || user?.email}
             </span>

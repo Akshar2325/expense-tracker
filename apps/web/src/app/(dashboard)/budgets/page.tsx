@@ -86,7 +86,8 @@ export default function BudgetsPage() {
                     <div
                       className="h-9 w-9 rounded-full flex items-center justify-center"
                       style={{
-                        backgroundColor: b.category?.color || "#f0efed",
+                        backgroundColor:
+                          b.category?.color || "var(--color-hairline-soft)",
                       }}
                     >
                       <span className="text-sm">{b.category?.icon || "•"}</span>

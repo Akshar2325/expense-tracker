@@ -37,7 +37,9 @@ export default function CategoriesPage() {
           <Card key={c.id} interactive className="p-4 flex items-center gap-3">
             <div
               className="h-9 w-9 rounded-full flex items-center justify-center shrink-0"
-              style={{ backgroundColor: c.color || "#f0efed" }}
+              style={{
+                backgroundColor: c.color || "var(--color-hairline-soft)",
+              }}
             >
               <span className="text-base">{c.icon || "•"}</span>
             </div>
