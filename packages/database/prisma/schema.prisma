@@ -1,0 +1,546 @@
+generator client {
+    provider = "prisma-client"
+    output   = "../src/generated/prisma"
+}
+
+datasource db {
+    provider = "postgresql"
+}
+
+// =====================
+// USERS & AUTH
+// =====================
+
+model User {
+    id              String    @id @default(uuid()) @db.Uuid
+    email           String    @unique @db.VarChar(320)
+    passwordHash    String
+    firstName       String?   @db.VarChar(100)
+    lastName        String?   @db.VarChar(100)
+    displayName     String?   @db.VarChar(200)
+    avatarUrl       String?
+    defaultCurrency String    @default("INR") @db.Char(3)
+    timezone        String    @default("UTC") @db.VarChar(100)
+    locale          String    @default("en-IN") @db.VarChar(20)
+    emailVerifiedAt DateTime?
+    status          String    @default("ACTIVE") @db.VarChar(20) // ACTIVE/SUSPENDED/DELETED
+    createdAt       DateTime  @default(now()) @db.Timestamptz
+    updatedAt       DateTime  @updatedAt @db.Timestamptz
+    deletedAt       DateTime? @db.Timestamptz
+
+    sessions                Session[]
+    devices                 Device[]
+    accounts                Account[]
+    categories              Category[]
+    paymentMethods          PaymentMethod[]
+    transactions            Transaction[]
+    budgets                 Budget[]
+    recurringTransactions   RecurringTransaction[]
+    tags                    Tag[]
+    savedFilters            SavedFilter[]
+    insights                Insight[]
+    notificationPreferences NotificationPreference?
+    exportJobs              ExportJob[]
+    syncCursors             SyncCursor[]
+    auditLogs               AuditLog[]
+    passwordResetTokens     PasswordResetToken[]
+    emailVerificationTokens EmailVerificationToken[]
+
+    @@index([status])
+}
+
+model Session {
+    id               String    @id @default(uuid()) @db.Uuid
+    userId           String    @db.Uuid
+    refreshTokenHash String
+    deviceId         String?   @db.Uuid
+    ipAddress        String?   @db.Inet
+    userAgent        String?
+    expiresAt        DateTime  @db.Timestamptz
+    revokedAt        DateTime? @db.Timestamptz
+    createdAt        DateTime  @default(now()) @db.Timestamptz
+    updatedAt        DateTime  @updatedAt @db.Timestamptz
+
+    user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    device Device? @relation(fields: [deviceId], references: [id], onDelete: SetNull)
+
+    @@index([userId])
+    @@index([expiresAt])
+}
+
+model Device {
+    id         String   @id @default(uuid()) @db.Uuid
+    userId     String   @db.Uuid
+    platform   String   @db.VarChar(20) // IOS/ANDROID/WEB
+    deviceName String   @db.VarChar(150)
+    appVersion String   @db.VarChar(30)
+    osVersion  String   @db.VarChar(50)
+    pushToken  String?
+    lastSeenAt DateTime @default(now()) @db.Timestamptz
+    createdAt  DateTime @default(now()) @db.Timestamptz
+    updatedAt  DateTime @updatedAt @db.Timestamptz
+
+    user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+    sessions Session[]
+
+    @@index([userId])
+}
+
+model PasswordResetToken {
+    id        String    @id @default(uuid()) @db.Uuid
+    userId    String    @db.Uuid
+    tokenHash String    @unique
+    expiresAt DateTime  @db.Timestamptz
+    usedAt    DateTime? @db.Timestamptz
+    createdAt DateTime  @default(now()) @db.Timestamptz
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@index([userId])
+    @@index([expiresAt])
+}
+
+model EmailVerificationToken {
+    id        String    @id @default(uuid()) @db.Uuid
+    userId    String    @db.Uuid
+    tokenHash String    @unique
+    expiresAt DateTime  @db.Timestamptz
+    usedAt    DateTime? @db.Timestamptz
+    createdAt DateTime  @default(now()) @db.Timestamptz
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@index([userId])
+    @@index([expiresAt])
+}
+
+// =====================
+// ACCOUNTS
+// =====================
+
+model Account {
+    id             String    @id @default(uuid()) @db.Uuid
+    userId         String    @db.Uuid
+    name           String    @db.VarChar(150)
+    accountType    String    @db.VarChar(30) // CASH/BANK/CREDIT_CARD/WALLET/INVESTMENT/OTHER
+    currency       String    @default("INR") @db.Char(3)
+    openingBalance Decimal   @default(0) @db.Decimal(19, 4)
+    currentBalance Decimal   @default(0) @db.Decimal(19, 4)
+    creditLimit    Decimal?  @db.Decimal(19, 4)
+    color          String?   @db.VarChar(20)
+    icon           String?   @db.VarChar(100)
+    isArchived     Boolean   @default(false)
+    includeInTotal Boolean   @default(true)
+    createdAt      DateTime  @default(now()) @db.Timestamptz
+    updatedAt      DateTime  @updatedAt @db.Timestamptz
+    deletedAt      DateTime? @db.Timestamptz
+
+    user                  User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    transactions          Transaction[]
+    budgetAccounts        Budget[]
+    paymentMethods        PaymentMethod[]
+    recurringTransactions RecurringTransaction[]
+    transferSources       TransferLink[]         @relation("TransferSourceAccount")
+    transferDestinations  TransferLink[]         @relation("TransferDestAccount")
+
+    @@index([userId])
+    @@index([userId, isArchived])
+}
+
+// =====================
+// CATEGORIES
+// =====================
+
+model Category {
+    id           String    @id @default(uuid()) @db.Uuid
+    userId       String?   @db.Uuid // nullable for system categories
+    parentId     String?   @db.Uuid
+    name         String    @db.VarChar(120)
+    categoryType String    @default("EXPENSE") @db.VarChar(20) // EXPENSE/INCOME/BOTH
+    icon         String?   @db.VarChar(100)
+    color        String?   @db.VarChar(20)
+    isSystem     Boolean   @default(false)
+    sortOrder    Int       @default(0)
+    isActive     Boolean   @default(true)
+    createdAt    DateTime  @default(now()) @db.Timestamptz
+    updatedAt    DateTime  @updatedAt @db.Timestamptz
+    deletedAt    DateTime? @db.Timestamptz
+
+    user                  User?                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+    parent                Category?              @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
+    children              Category[]             @relation("CategoryHierarchy")
+    transactions          Transaction[]
+    budgetCategories      Budget[]
+    recurringTransactions RecurringTransaction[]
+
+    @@index([userId])
+    @@index([parentId])
+}
+
+// =====================
+// PAYMENT METHODS
+// =====================
+
+model PaymentMethod {
+    id         String    @id @default(uuid()) @db.Uuid
+    userId     String?   @db.Uuid
+    accountId  String?   @db.Uuid
+    name       String    @db.VarChar(100)
+    methodType String    @db.VarChar(30) // CASH/UPI/DEBIT_CARD/CREDIT_CARD/BANK_TRANSFER/NET_BANKING/WALLET/OTHER
+    isSystem   Boolean   @default(false)
+    isActive   Boolean   @default(true)
+    createdAt  DateTime  @default(now()) @db.Timestamptz
+    updatedAt  DateTime  @updatedAt @db.Timestamptz
+    deletedAt  DateTime? @db.Timestamptz
+
+    user                  User?                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+    account               Account?               @relation(fields: [accountId], references: [id], onDelete: SetNull)
+    transactions          Transaction[]
+    recurringTransactions RecurringTransaction[]
+
+    @@index([userId])
+}
+
+// =====================
+// TAGS
+// =====================
+
+model Tag {
+    id        String    @id @default(uuid()) @db.Uuid
+    userId    String    @db.Uuid
+    name      String    @db.VarChar(80)
+    color     String?   @db.VarChar(20)
+    createdAt DateTime  @default(now()) @db.Timestamptz
+    updatedAt DateTime  @updatedAt @db.Timestamptz
+    deletedAt DateTime? @db.Timestamptz
+
+    user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+    transactionTags TransactionTag[]
+
+    @@unique([userId, name])
+    @@index([userId])
+}
+
+// =====================
+// TRANSACTIONS
+// =====================
+
+model Transaction {
+    id                     String    @id @default(uuid()) @db.Uuid
+    userId                 String    @db.Uuid
+    clientTransactionId    String    @db.Uuid
+    accountId              String    @db.Uuid
+    categoryId             String?   @db.Uuid
+    paymentMethodId        String?   @db.Uuid
+    recurringTransactionId String?   @db.Uuid
+    type                   String    @db.VarChar(20) // EXPENSE/INCOME/TRANSFER/REFUND/ADJUSTMENT
+    amount                 Decimal   @db.Decimal(19, 4)
+    currency               String    @default("INR") @db.Char(3)
+    title                  String    @db.VarChar(200)
+    merchantName           String?   @db.VarChar(200)
+    description            String?
+    notes                  String?
+    transactionAt          DateTime  @db.Timestamptz
+    source                 String    @default("MANUAL") @db.VarChar(20) // MANUAL/WIDGET/IMPORT/RECURRING/API
+    status                 String    @default("SYNCED") @db.VarChar(20) // PENDING/SYNCED/FAILED/VOIDED
+    locationName           String?   @db.VarChar(200)
+    latitude               Decimal?  @db.Decimal(9, 6)
+    longitude              Decimal?  @db.Decimal(9, 6)
+    externalReference      String?   @db.VarChar(200)
+    metadata               Json?
+    version                BigInt    @default(1)
+    createdAt              DateTime  @default(now()) @db.Timestamptz
+    updatedAt              DateTime  @updatedAt @db.Timestamptz
+    deletedAt              DateTime? @db.Timestamptz
+
+    user                     User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+    account                  Account               @relation(fields: [accountId], references: [id])
+    category                 Category?             @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+    paymentMethod            PaymentMethod?        @relation(fields: [paymentMethodId], references: [id], onDelete: SetNull)
+    recurringTransaction     RecurringTransaction? @relation(fields: [recurringTransactionId], references: [id])
+    transactionTags          TransactionTag[]
+    receipts                 Receipt[]
+    transferLinksSource      TransferLink[]        @relation("TransferSourceTransaction")
+    transferLinksDestination TransferLink[]        @relation("TransferDestTransaction")
+
+    @@unique([userId, clientTransactionId])
+    @@index([userId, transactionAt(sort: Desc)])
+    @@index([userId, categoryId, transactionAt(sort: Desc)])
+    @@index([userId, accountId, transactionAt(sort: Desc)])
+    @@index([userId, type, transactionAt(sort: Desc)])
+    @@index([userId, merchantName])
+}
+
+model TransactionTag {
+    transactionId String   @db.Uuid
+    tagId         String   @db.Uuid
+    createdAt     DateTime @default(now()) @db.Timestamptz
+
+    transaction Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+    tag         Tag         @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+    @@id([transactionId, tagId])
+    @@index([tagId])
+}
+
+// =====================
+// TRANSFERS
+// =====================
+
+model TransferLink {
+    id                       String   @id @default(uuid()) @db.Uuid
+    userId                   String   @db.Uuid
+    sourceAccountId          String   @db.Uuid
+    destinationAccountId     String   @db.Uuid
+    sourceTransactionId      String   @db.Uuid
+    destinationTransactionId String   @db.Uuid
+    createdAt                DateTime @default(now()) @db.Timestamptz
+
+    sourceAccount          Account     @relation("TransferSourceAccount", fields: [sourceAccountId], references: [id])
+    destinationAccount     Account     @relation("TransferDestAccount", fields: [destinationAccountId], references: [id])
+    sourceTransaction      Transaction @relation("TransferSourceTransaction", fields: [sourceTransactionId], references: [id])
+    destinationTransaction Transaction @relation("TransferDestTransaction", fields: [destinationTransactionId], references: [id])
+
+    @@index([userId])
+    @@index([sourceTransactionId])
+    @@index([destinationTransactionId])
+}
+
+// =====================
+// RECURRING TRANSACTIONS
+// =====================
+
+model RecurringTransaction {
+    id              String    @id @default(uuid()) @db.Uuid
+    userId          String    @db.Uuid
+    accountId       String    @db.Uuid
+    categoryId      String?   @db.Uuid
+    paymentMethodId String?   @db.Uuid
+    type            String    @db.VarChar(20) // EXPENSE/INCOME
+    amount          Decimal   @db.Decimal(19, 4)
+    currency        String    @default("INR") @db.Char(3)
+    title           String    @db.VarChar(200)
+    description     String?
+    frequency       String    @db.VarChar(30) // DAILY/WEEKLY/MONTHLY/QUARTERLY/YEARLY/CUSTOM
+    intervalValue   Int?
+    intervalUnit    String?   @db.VarChar(20) // DAY/WEEK/MONTH/YEAR
+    startDate       DateTime  @db.Date
+    endDate         DateTime? @db.Date
+    nextRunAt       DateTime  @db.Timestamptz
+    autoCreate      Boolean   @default(false)
+    isActive        Boolean   @default(true)
+    metadata        Json?
+    createdAt       DateTime  @default(now()) @db.Timestamptz
+    updatedAt       DateTime  @updatedAt @db.Timestamptz
+    deletedAt       DateTime? @db.Timestamptz
+
+    user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+    account       Account        @relation(fields: [accountId], references: [id])
+    category      Category?      @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+    paymentMethod PaymentMethod? @relation(fields: [paymentMethodId], references: [id], onDelete: SetNull)
+    transactions  Transaction[]
+
+    @@index([userId, nextRunAt])
+    @@index([userId, isActive])
+}
+
+// =====================
+// BUDGETS
+// =====================
+
+model Budget {
+    id              String    @id @default(uuid()) @db.Uuid
+    userId          String    @db.Uuid
+    categoryId      String?   @db.Uuid
+    accountId       String?   @db.Uuid
+    name            String    @db.VarChar(150)
+    amount          Decimal   @db.Decimal(19, 4)
+    currency        String    @default("INR") @db.Char(3)
+    periodType      String    @default("MONTHLY") @db.VarChar(20) // WEEKLY/MONTHLY/QUARTERLY/YEARLY/CUSTOM
+    startDate       DateTime  @db.Date
+    endDate         DateTime? @db.Date
+    rolloverEnabled Boolean   @default(false)
+    rolloverAmount  Decimal   @default(0) @db.Decimal(19, 4)
+    warningPercent  Decimal   @default(80) @db.Decimal(5, 2)
+    criticalPercent Decimal   @default(100) @db.Decimal(5, 2)
+    isActive        Boolean   @default(true)
+    createdAt       DateTime  @default(now()) @db.Timestamptz
+    updatedAt       DateTime  @updatedAt @db.Timestamptz
+    deletedAt       DateTime? @db.Timestamptz
+
+    user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+    category Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+    account  Account?  @relation(fields: [accountId], references: [id], onDelete: SetNull)
+
+    @@index([userId])
+    @@index([userId, categoryId])
+}
+
+// =====================
+// RECEIPTS
+// =====================
+
+model Receipt {
+    id               String    @id @default(uuid()) @db.Uuid
+    userId           String    @db.Uuid
+    transactionId    String    @db.Uuid
+    objectKey        String
+    originalFilename String    @db.VarChar(255)
+    mimeType         String    @db.VarChar(100)
+    fileSize         BigInt
+    checksum         String?   @db.VarChar(128)
+    thumbnailKey     String?
+    ocrStatus        String    @default("NONE") @db.VarChar(20) // NONE/PENDING/COMPLETED/FAILED
+    ocrData          Json?
+    createdAt        DateTime  @default(now()) @db.Timestamptz
+    deletedAt        DateTime? @db.Timestamptz
+
+    transaction Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+
+    @@index([userId])
+    @@index([transactionId])
+}
+
+// =====================
+// SAVED FILTERS
+// =====================
+
+model SavedFilter {
+    id               String    @id @default(uuid()) @db.Uuid
+    userId           String    @db.Uuid
+    name             String    @db.VarChar(120)
+    filterDefinition Json
+    createdAt        DateTime  @default(now()) @db.Timestamptz
+    updatedAt        DateTime  @updatedAt @db.Timestamptz
+    deletedAt        DateTime? @db.Timestamptz
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@index([userId])
+}
+
+// =====================
+// NOTIFICATION PREFERENCES
+// =====================
+
+model NotificationPreference {
+    id              String   @id @default(uuid()) @db.Uuid
+    userId          String   @unique @db.Uuid
+    budgetAlerts    Boolean  @default(true)
+    recurringAlerts Boolean  @default(true)
+    weeklySummary   Boolean  @default(true)
+    monthlySummary  Boolean  @default(true)
+    unusualSpending Boolean  @default(true)
+    marketing       Boolean  @default(false)
+    pushEnabled     Boolean  @default(true)
+    emailEnabled    Boolean  @default(true)
+    updatedAt       DateTime @updatedAt @db.Timestamptz
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// =====================
+// INSIGHTS
+// =====================
+
+model Insight {
+    id          String    @id @default(uuid()) @db.Uuid
+    userId      String    @db.Uuid
+    insightType String    @db.VarChar(50)
+    title       String    @db.VarChar(200)
+    description String
+    severity    String    @default("INFO") @db.VarChar(20) // INFO/WARNING/CRITICAL
+    periodStart DateTime  @db.Date
+    periodEnd   DateTime  @db.Date
+    data        Json?
+    isRead      Boolean   @default(false)
+    isDismissed Boolean   @default(false)
+    createdAt   DateTime  @default(now()) @db.Timestamptz
+    expiresAt   DateTime? @db.Timestamptz
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@index([userId, isDismissed])
+    @@index([userId, createdAt(sort: Desc)])
+}
+
+// =====================
+// EXPORT JOBS
+// =====================
+
+model ExportJob {
+    id           String    @id @default(uuid()) @db.Uuid
+    userId       String    @db.Uuid
+    exportType   String    @db.VarChar(20) // CSV/PDF/JSON
+    filters      Json?
+    status       String    @default("QUEUED") @db.VarChar(20) // QUEUED/PROCESSING/COMPLETED/FAILED
+    objectKey    String?
+    errorMessage String?
+    requestedAt  DateTime  @default(now()) @db.Timestamptz
+    completedAt  DateTime? @db.Timestamptz
+    expiresAt    DateTime? @db.Timestamptz
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@index([userId, status])
+}
+
+// =====================
+// SYNC CURSORS
+// =====================
+
+model SyncCursor {
+    id           String   @id @default(uuid()) @db.Uuid
+    userId       String   @db.Uuid
+    deviceId     String   @db.Uuid
+    cursor       BigInt   @default(0)
+    lastSyncedAt DateTime @default(now()) @db.Timestamptz
+    createdAt    DateTime @default(now()) @db.Timestamptz
+    updatedAt    DateTime @updatedAt @db.Timestamptz
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([userId, deviceId])
+}
+
+// =====================
+// AUDIT LOGS
+// =====================
+
+model AuditLog {
+    id         String   @id @default(uuid()) @db.Uuid
+    userId     String?  @db.Uuid
+    actorType  String   @db.VarChar(20) // USER/SYSTEM/ADMIN
+    action     String   @db.VarChar(100)
+    entityType String   @db.VarChar(50)
+    entityId   String?  @db.Uuid
+    beforeData Json?
+    afterData  Json?
+    ipAddress  String?  @db.Inet
+    userAgent  String?
+    createdAt  DateTime @default(now()) @db.Timestamptz
+
+    user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+    @@index([userId])
+    @@index([entityType, entityId])
+    @@index([createdAt(sort: Desc)])
+}
+
+// =====================
+// IDEMPOTENCY RECORDS
+// =====================
+
+model IdempotencyRecord {
+    id             String   @id @default(uuid()) @db.Uuid
+    userId         String   @db.Uuid
+    idempotencyKey String   @db.Uuid
+    requestHash    String
+    responseStatus Int
+    responseBody   String
+    createdAt      DateTime @default(now()) @db.Timestamptz
+    expiresAt      DateTime @db.Timestamptz
+
+    @@unique([userId, idempotencyKey])
+    @@index([expiresAt])
+}

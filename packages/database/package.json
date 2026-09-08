@@ -1,0 +1,45 @@
+{
+  "name": "@expense-tracker/database",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./generated-client": {
+      "types": "./dist/generated/prisma/client.d.ts",
+      "default": "./dist/generated/prisma/client.js"
+    },
+    "./enums": {
+      "types": "./dist/generated/prisma/enums.d.ts",
+      "default": "./dist/generated/prisma/enums.js"
+    }
+  },
+  "scripts": {
+    "prisma:generate": "prisma generate",
+    "prisma:push": "prisma db push",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:migrate:deploy": "prisma migrate deploy",
+    "prisma:seed": "tsx prisma/seed.ts",
+    "prisma:studio": "prisma studio",
+    "build": "tsup",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@expense-tracker/types": "workspace:*",
+    "@prisma/adapter-pg": "^7.10.0",
+    "@prisma/client": "^7.10.0",
+    "pg": "^8.13.1"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.7",
+    "prisma": "^7.10.0",
+    "tsup": "^8.5.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}
