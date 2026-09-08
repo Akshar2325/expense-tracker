@@ -1,0 +1,25 @@
+{
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "rootDir": "..",
+  "testEnvironment": "node",
+  "testRegex": ".e2e-spec.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": [
+      "ts-jest",
+      {
+        "tsconfig": {
+          "module": "CommonJS",
+          "moduleResolution": "Node",
+          "experimentalDecorators": true,
+          "emitDecoratorMetadata": true,
+          "esModuleInterop": true
+        }
+      }
+    ]
+  },
+  "moduleNameMapper": {
+    "^@expense-tracker/database$": "<rootDir>/apps/api/test/database-stub.ts",
+    "^@expense-tracker/validation$": "<rootDir>/packages/validation/src/index.ts",
+    "^@expense-tracker/types$": "<rootDir>/packages/types/src/index.ts"
+  }
+}

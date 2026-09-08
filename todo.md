@@ -34,7 +34,7 @@
 - [x] 24. Web saved filters UI
 - [x] 25. NestJS recurring-transactions module
 - [x] 26. Web recurring transactions page
-- [ ] 27. Commit Sprint 3 to GitHub
+- [x] 27. Commit Sprint 3 to GitHub (commit 913cfe0)
 
 ## Sprint 4 — Reports + Insights
 
@@ -42,7 +42,7 @@
 - [x] 29. NestJS insights module (deterministic insights engine)
 - [x] 30. Web reports page with charts (Recharts)
 - [x] 31. Web insights cards on dashboard
-- [ ] 32. Commit Sprint 4 to GitHub
+- [x] 32. Commit Sprint 4 to GitHub (included in Sprint 1 web commit 7cfd41b)
 
 ## Sprint 5 — Accounts + Export
 
@@ -51,13 +51,15 @@
 - [x] 35. Web settings pages
 - [x] 36. NestJS export module (CSV)
 - [x] 37. NestJS receipts module (presign upload)
-- [ ] 38. Commit Sprint 5 to GitHub
+- [x] 38. Commit Sprint 5 to GitHub (included in Sprint 1 web commit 7cfd41b)
 
 ## Sprint 6 — Testing & Polish
 
-- [ ] 39. Backend unit tests
-- [ ] 40. Backend integration tests
-- [ ] 41. Web E2E tests (Playwright)
+- [x] 39. Backend unit tests (27 tests: auth, accounts, transactions, reports)
+- [x] 40. Backend integration tests (17 e2e tests against live API + PostgreSQL)
+- [x] 41. Web E2E tests (Playwright: 6 tests — auth flow + transactions)
+- [x] 42. Error/loading states polish (global-error.tsx + not-found.tsx; all pages already had skeletons/error states)
+- [ ] 43. Final commit
 - [ ] 42. Error/loading states polish
 - [ ] 43. Final commit
 - [ ] 42. Error handling & empty states

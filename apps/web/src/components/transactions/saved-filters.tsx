@@ -87,10 +87,7 @@ export function SavedFilters({ currentFilters, onApply }: SavedFiltersProps) {
 
       {open && (
         <>
-          <div
-            className="fixed inset-0 z-40"
-            onClick={() => setOpen(false)}
-          />
+          <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
           <div className="absolute right-0 top-12 z-50 w-80 bg-surface-card rounded-xxl shadow-soft border border-hairline-soft p-4 space-y-3">
             <div className="flex items-center justify-between">
               <h3 className="text-title-sm text-ink">Saved Filters</h3>
