@@ -1,0 +1,153 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import Inter (body) and EB Garamond (display substitute for Waldenburg) */
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-canvas text-body font-sans;
+    font-feature-settings: 'cv11', 'ss01', 'ss03';
+  }
+
+  /* Editorial letter-spacing on body text */
+  body,
+  p,
+  td,
+  li,
+  span {
+    letter-spacing: 0.16px;
+  }
+
+  /* Subtle focus ring with curved edges */
+  *:focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary/20 outline;
+  }
+}
+
+@layer components {
+  /* Gradient orb — atmospheric decoration */
+  .gradient-orb {
+    @apply absolute rounded-full opacity-40 blur-3xl pointer-events-none;
+    animation: orb-drift 18s ease-in-out infinite;
+  }
+
+  .gradient-orb-mint {
+    background: radial-gradient(circle, #a7e5d3 0%, transparent 70%);
+  }
+
+  .gradient-orb-peach {
+    background: radial-gradient(circle, #f4c5a8 0%, transparent 70%);
+  }
+
+  .gradient-orb-lavender {
+    background: radial-gradient(circle, #c8b8e0 0%, transparent 70%);
+  }
+
+  .gradient-orb-sky {
+    background: radial-gradient(circle, #a8c8e8 0%, transparent 70%);
+  }
+
+  .gradient-orb-rose {
+    background: radial-gradient(circle, #e8b8c4 0%, transparent 70%);
+  }
+
+  /* Gradient orb card wrapper */
+  .gradient-orb-card {
+    @apply relative overflow-hidden rounded-xxl bg-canvas-soft p-xl;
+  }
+
+  .gradient-orb-card .gradient-orb {
+    @apply w-48 h-48;
+  }
+
+  /* Card elevation base */
+  .card {
+    @apply bg-surface-card rounded-xl border border-hairline;
+  }
+
+  .card-interactive {
+    @apply card transition-shadow duration-200;
+  }
+
+  .card-interactive:hover {
+    @apply shadow-soft;
+  }
+
+  /* Pill button — the CTA standard */
+  .btn-primary {
+    @apply inline-flex items-center justify-center
+           bg-primary text-on-primary text-button font-sans
+           rounded-pill px-5 py-2.5 h-10
+           transition-colors duration-150
+           hover:bg-primary-active
+           active:bg-primary-active
+           disabled:opacity-40 disabled:pointer-events-none;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center
+           bg-transparent text-ink text-button font-sans
+           rounded-pill px-5 py-2.5 h-10
+           border border-hairline-strong
+           transition-colors duration-150
+           hover:bg-surface-strong
+           active:bg-hairline-soft
+           disabled:opacity-40 disabled:pointer-events-none;
+  }
+
+  .btn-tertiary {
+    @apply inline-flex items-center justify-center
+           bg-transparent text-ink text-button font-sans
+           transition-colors duration-150
+           hover:text-primary
+           disabled:opacity-40 disabled:pointer-events-none;
+  }
+
+  /* Badge pill */
+  .badge {
+    @apply inline-flex items-center
+           bg-surface-strong text-ink
+           text-caption-uppercase font-sans
+           rounded-pill px-2.5 py-1;
+  }
+
+  /* Text input */
+  .input {
+    @apply w-full bg-surface-card text-ink text-body-md font-sans
+           rounded-md px-4 py-3 h-11
+           border border-hairline-strong
+           placeholder:text-muted-soft
+           transition-all duration-150
+           focus:outline-none focus:border-2 focus:border-primary;
+  }
+
+  /* Section rhythm */
+  .section {
+    @apply py-section;
+  }
+
+  /* Container */
+  .container-content {
+    @apply w-full max-w-content mx-auto px-base;
+  }
+}
+
+@layer utilities {
+  /* Editorial display font */
+  .font-display {
+    font-family: 'EB Garamond', 'Times New Roman', serif;
+    font-weight: 300;
+  }
+
+  /* Transition utility */
+  .transition-base {
+    @apply transition-all duration-200 ease-out;
+  }
+}

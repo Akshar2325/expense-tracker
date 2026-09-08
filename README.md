@@ -4,15 +4,15 @@ A production-grade, full-stack personal finance application built as a pnpm + Tu
 
 ## Stack
 
-| Layer       | Technology                                             |
-| ----------- | ------------------------------------------------------ |
-| Monorepo    | pnpm workspaces + Turborepo                            |
-| Backend     | NestJS 10, TypeScript, Passport JWT, Argon2id           |
-| ORM         | Prisma 7 (PostgreSQL adapter)                           |
-| Database    | PostgreSQL 18                                          |
-| Validation  | Zod (shared package)                                   |
-| Frontend    | Next.js App Router + Tailwind CSS                      |
-| Infra       | Docker Compose (PostgreSQL, Redis, Mailhog)            |
+| Layer      | Technology                                    |
+| ---------- | --------------------------------------------- |
+| Monorepo   | pnpm workspaces + Turborepo                   |
+| Backend    | NestJS 10, TypeScript, Passport JWT, Argon2id |
+| ORM        | Prisma 7 (PostgreSQL adapter)                 |
+| Database   | PostgreSQL 18                                 |
+| Validation | Zod (shared package)                          |
+| Frontend   | Next.js App Router + Tailwind CSS             |
+| Infra      | Docker Compose (PostgreSQL, Redis, Mailhog)   |
 
 ## Project Structure
 
@@ -76,15 +76,15 @@ pnpm --filter @expense-tracker/api dev
 
 ## Scripts
 
-| Command            | Description                          |
-| ------------------ | ------------------------------------ |
-| `pnpm build`       | Build all packages                   |
-| `pnpm dev`         | Run all dev servers                  |
-| `pnpm lint`        | Lint all packages                    |
-| `pnpm test`        | Run all tests                        |
-| `pnpm db:push`     | Push Prisma schema to database       |
-| `pnpm db:seed`     | Seed the database                    |
-| `pnpm db:generate` | Regenerate Prisma client             |
+| Command            | Description                    |
+| ------------------ | ------------------------------ |
+| `pnpm build`       | Build all packages             |
+| `pnpm dev`         | Run all dev servers            |
+| `pnpm lint`        | Lint all packages              |
+| `pnpm test`        | Run all tests                  |
+| `pnpm db:push`     | Push Prisma schema to database |
+| `pnpm db:seed`     | Seed the database              |
+| `pnpm db:generate` | Regenerate Prisma client       |
 
 ## API Modules
 
