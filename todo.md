@@ -60,8 +60,10 @@
 - [x] 41. Web E2E tests (Playwright: 6 tests — auth flow + transactions)
 - [x] 42. Error/loading states polish (global-error.tsx + not-found.tsx; all pages already had skeletons/error states)
 - [x] 43. Final commit (a4f50c6 — Sprint 6 testing & polish pushed to GitHub)
-- [ ] 42. Error/loading states polish
-- [ ] 43. Final commit
-- [ ] 42. Error handling & empty states
-- [ ] 43. Loading states & skeletons
-- [ ] 44. Final commit & deployment docs
+
+## Sprint 7 — Dark Mode & DX
+
+- [x] 44. Dark mode support (CSS-variable theming, ThemeProvider, FOUC-prevention, toggle in nav/auth/dashboard headers)
+- [x] 45. Theme-aware charts (reports page via MutationObserver-driven useChartColors) + theme-aware category chips & wallet SVG
+- [x] 46. Gitignore generated Prisma client (packages/database/src/generated) + prebuild hook to regenerate on build
+- [x] 47. Commit Sprint 7 to GitHub (commit 66bcb87)
