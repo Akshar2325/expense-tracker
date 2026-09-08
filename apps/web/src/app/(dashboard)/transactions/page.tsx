@@ -6,6 +6,10 @@ import { formatCurrency, formatDate } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  TransactionForm,
+  type TransactionFormValues,
+} from "@/components/transactions/transaction-form";
 import { Search, Plus } from "lucide-react";
 
 interface Transaction {
@@ -14,8 +18,8 @@ interface Transaction {
   amount: string;
   type: string;
   transactionAt: string;
-  category?: { name: string; color: string; icon: string } | null;
-  account?: { name: string } | null;
+  category?: { id: string; name: string; color: string; icon: string } | null;
+  account?: { id: string; name: string } | null;
 }
 
 interface ListResponse {
@@ -35,8 +39,10 @@ export default function TransactionsPage() {
   const [type, setType] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [formOpen, setFormOpen] = useState(false);
+  const [editing, setEditing] = useState<TransactionFormValues | null>(null);
 
-  useEffect(() => {
+  const load = () => {
     const params = new URLSearchParams();
     if (search) params.set("search", search);
     if (type) params.set("types", type);
@@ -49,7 +55,30 @@ export default function TransactionsPage() {
       })
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, type]);
+
+  const openAdd = () => {
+    setEditing(null);
+    setFormOpen(true);
+  };
+
+  const openEdit = (t: Transaction) => {
+    setEditing({
+      id: t.id,
+      title: t.title,
+      amount: t.amount,
+      type: t.type,
+      accountId: t.account?.id || "",
+      categoryId: t.category?.id || "",
+      transactionAt: t.transactionAt,
+    });
+    setFormOpen(true);
+  };
 
   return (
     <div className="flex flex-col gap-8">
@@ -62,7 +91,7 @@ export default function TransactionsPage() {
             {total} transaction{total === 1 ? "" : "s"} in your ledger.
           </p>
         </div>
-        <Button>
+        <Button onClick={openAdd}>
           <Plus className="h-4 w-4" />
           Add Transaction
         </Button>
@@ -118,9 +147,10 @@ export default function TransactionsPage() {
         ) : (
           <div className="divide-y divide-hairline-soft">
             {transactions.map((t) => (
-              <div
+              <button
                 key={t.id}
-                className="flex items-center justify-between px-6 py-4 hover:bg-canvas-soft transition-colors"
+                onClick={() => openEdit(t)}
+                className="w-full flex items-center justify-between px-6 py-4 hover:bg-canvas-soft transition-colors text-left"
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <div
@@ -152,11 +182,18 @@ export default function TransactionsPage() {
                     {formatDate(t.transactionAt)}
                   </p>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         )}
       </Card>
+
+      <TransactionForm
+        open={formOpen}
+        initial={editing}
+        onClose={() => setFormOpen(false)}
+        onSaved={load}
+      />
     </div>
   );
 }

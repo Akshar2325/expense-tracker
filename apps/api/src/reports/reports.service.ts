@@ -146,10 +146,23 @@ export class ReportsService {
     if (query.from || query.to) {
       where.transactionAt = {
         ...(query.from ? { gte: new Date(query.from) } : {}),
-        ...(query.to ? { lte: new Date(query.to) } : {}),
+        ...(query.to ? { lte: this.endOfDayInclusive(query.to) } : {}),
       };
     }
     return where;
+  }
+
+  /**
+   * When a date-only string (YYYY-MM-DD) is passed as `to`, it should be
+   * inclusive of the entire day. `new Date("2026-09-08")` parses to midnight
+   * UTC, which would exclude transactions later that day. So we bump it to
+   * the end of the day (23:59:59.999).
+   */
+  private endOfDayInclusive(value: string): Date {
+    if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+      return new Date(`${value}T23:59:59.999Z`);
+    }
+    return new Date(value);
   }
 
   private bucketKey(date: Date, groupBy: string): string {
