@@ -59,7 +59,7 @@
 - [x] 40. Backend integration tests (17 e2e tests against live API + PostgreSQL)
 - [x] 41. Web E2E tests (Playwright: 6 tests — auth flow + transactions)
 - [x] 42. Error/loading states polish (global-error.tsx + not-found.tsx; all pages already had skeletons/error states)
-- [ ] 43. Final commit
+- [x] 43. Final commit (a4f50c6 — Sprint 6 testing & polish pushed to GitHub)
 - [ ] 42. Error/loading states polish
 - [ ] 43. Final commit
 - [ ] 42. Error handling & empty states
